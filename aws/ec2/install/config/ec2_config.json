@@ -1,0 +1,16 @@
+{
+    "cicdInstance": {
+        "user": "ubuntu",
+        "name": "cicd-buddy-care",
+        "publicIp": "34.230.32.9"
+    },
+    "servicesInstance": {
+        "user": "ubuntu",
+        "name": "services-buddy-care",
+        "publicIp": "98.84.135.175"
+    },
+    "keyInfo": {
+        "name": "buddy_care_key",
+        "location": "/Users/cristhian/go/src/personal/BuddyCare/infrastructure/aws/ec2/buddy_care_key.pem"
+    }
+}

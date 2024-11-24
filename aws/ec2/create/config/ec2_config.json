@@ -1,0 +1,11 @@
+{
+    "region": "us-east-1",
+    "user": "ubuntu",
+    "name": "services-buddy-care",
+    "imageId": "ami-04b70fa74e45c3917",
+    "instanceType": "t2.medium",
+    "minCount": 1,
+    "maxCount": 1,
+    "keyName": "buddy_care_key",
+    "keyLocation": "/Users/cristhian/go/src/personal/BuddyCare/infrastructure/aws/ec2/buddy_care_key.pem"
+}

@@ -1,0 +1,44 @@
+- name: deploy admin service
+  hosts: localhost # to execute the ansible playbook in the same instance cicd-buddy-care ec2, instead of remotely in services-buddy-care ec2
+  tasks:
+    - name: Set service name
+      set_fact:
+        admin_service: "admin_service"
+    - name: Verify service name
+      debug:
+        msg: "Preparing deployment for service: {{ admin_service }}"
+    - block:
+        - name: Check if the namespace exists
+          kubernetes.core.k8s_info:
+            kind: Namespace
+            name: buddy-care # ansible does not like underscore
+          register: namespace_info
+        - name: Deploy service with Helm
+          kubernetes.core.helm:
+            name: "admin-service" # ansible does not like underscore
+            chart_ref: "/home/ubuntu/ansible/charts/{{ admin_service }}"
+            values_files:
+              - "/home/ubuntu/ansible/charts/{{ admin_service }}/values.yaml"
+            release_namespace: "buddy-care"
+            kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+            binary_path: "/usr/local/bin/helm"
+            create_namespace: "{{ namespace_info.resources | length == 0 }}"
+          become: yes
+          register: helm_deploy_result
+        - name: Log Helm deployment result
+          debug:
+            msg: "Helm deployment result: {{ helm_deploy_result.stdout_lines }}"
+      rescue:
+        - name: Handle deployment error
+          debug:
+            msg: >
+              Error during deployment: {{ helm_deploy_result.stderr_lines | join(' ')
+              if helm_deploy_result.stderr_lines is defined else helm_deploy_result.msg
+              if helm_deploy_result.msg is defined else 'No error message available.' }}
+      always:
+        - name: Ensure cleanup tasks are run
+          debug:
+            msg: "Cleaning up resources if necessary"
+    - name: finishing deployment
+      debug:
+        msg: "deployment of {{ admin_service }} done successfully"

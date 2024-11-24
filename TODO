@@ -1,0 +1,50 @@
+################ flow to create both instances ####################
+- create the two instances, keeping in mind a different name for each one
+- for the cicd instance
+    - install jenkins-> ansible -> docker
+-for the service instance
+    - install k8s -> docker
+- do the "manual steps"
+- exec a push in admin service to trigger the deployment
+
+################ problems to solve ####################
+about jenkinks
+- unlock jenkins page at the moment of installation
+- solve problem that jenkins not takes the pipeline files at the moment of installation
+- create webhook for core-services but when exists a push to branch /develop (when a new instance is created for development)
+
+################ manual steps done ####################
+manuals steps done in cicd-buddy-care ec2 instance at the moment of installation
+- generate the pipelines manually in jenkins
+- install the plugins
+- set the webhook for github
+- set the sudo visudo (to set the user jenkins as root)
+	sudo visudo
+	jenkins ALL=(ALL) NOPASSWD: ALL
+- set the secret for the docker password, to push the image to dockerhub
+- create a pulic and private ssh-keygen -t rsa
+- create the file /etc/rancher/k3s/k3s.yaml (to connect to k8s api)(copying k3s.yaml from k3s instance and updating the server property with the k8s instance private ip)
+- make sudo chmod 644 /etc/rancher/k3s/k3s.yaml to connect to to k8s api
+
+manuals steps done in services-buddy-care ec2 instance at the moment of installation
+- in the instance with k8s, copy the public rba key in the authorized_keys from the cicd-buddy-care ec2 instance to get a connection
+
+################ future improvements ####################
+- optimize the code
+- put the helm files in its own repository and download it from jenkins (to avoid copy files from golang code)
+- about github,make private the services repository and set the necessary config in jenkins pipeline
+- try to automate all the manual steps done
+
+################ what to do if Instances are stopped ####################
+- cicd-buddy-care
+  PrivateIP: 172.31.22.173
+  PublicIP: 34.230.32.9
+- services-buddy-care
+  PrivateIP: 172.31.17.34
+  PublicIP: 98.84.135.175
+- set the new ip of jenkins instance in the github webhook
+
+################ Where I left the work ####################
+- revisar el script de jenkins si el archivo local esta actualizado con el remoto
+- add permissions to the execute_deployment.sh
+- figure out  why is no triggering the github webhook
