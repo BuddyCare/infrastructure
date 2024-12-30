@@ -5,7 +5,7 @@ namespace: "buddy-care"
 app_label: "admin-service"
 replicas: 3
 container_name: "admin-service-container"
-container_image: "alexrondon89/admin-service:latest"
+container_image: "alexrondon89/admin_service:latest"
 container_port: 4000
 port: 5000
 environment: "local"
