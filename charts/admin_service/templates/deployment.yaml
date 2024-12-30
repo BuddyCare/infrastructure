@@ -23,3 +23,8 @@ spec:
           env:
             - name: ENVIRONMENT
               value: {{ .Values.environment }}
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt_secret
+                  key: jwt_value
