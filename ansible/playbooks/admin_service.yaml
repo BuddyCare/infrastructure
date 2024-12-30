@@ -16,9 +16,9 @@
         - name: Deploy service with Helm
           kubernetes.core.helm:
             name: "admin-service" # ansible does not like underscore
-            chart_ref: "/home/ubuntu/ansible/charts/{{ admin_service }}"
+            chart_ref: "./../../charts/{{ admin_service }}"
             values_files:
-              - "/home/ubuntu/ansible/charts/{{ admin_service }}/values.yaml"
+              - "./../../charts/{{ admin_service }}/values.yaml"
             release_namespace: "buddy-care"
             kubeconfig: "/etc/rancher/k3s/k3s.yaml"
             binary_path: "/usr/local/bin/helm"

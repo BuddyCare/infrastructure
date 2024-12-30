@@ -118,8 +118,6 @@ func (installSvc InstallSvc) InstallJenkins(ctx context.Context) error {
 func (installSvc InstallSvc) InstallAnsible(ctx context.Context) error {
 	fmt.Printf("installing ansible...")
 	folderCommands := []string{
-		"mkdir -p /home/ubuntu/ansible/charts",
-		"mkdir -p /home/ubuntu/ansible/playbooks",
 		"mkdir -p /home/ubuntu/ansible/scripts",
 	}
 
@@ -161,22 +159,6 @@ func (installSvc InstallSvc) InstallAnsible(ctx context.Context) error {
 		if err != nil {
 			return fmt.Errorf("failed to copy ansible files in remote server: %s", err)
 		}
-	}
-
-	//copy playbooks files
-	remotePathForPlaybookFiles := "/home/ubuntu/ansible/playbooks"
-	localPathForPlaybookFiles := "./ansible/playbooks/*"
-	err = util.CopyFileToRemoteHost(conn, remotePathForPlaybookFiles, localPathForPlaybookFiles)
-	if err != nil {
-		return fmt.Errorf("failed to copy ansible playbooks files in remote server: %s", err)
-	}
-
-	//copy charts files
-	remotePathForChartsFiles := "/home/ubuntu/ansible/charts"
-	localPathForChartsFiles := "./charts/*"
-	err = util.CopyFileToRemoteHost(conn, remotePathForChartsFiles, localPathForChartsFiles)
-	if err != nil {
-		return fmt.Errorf("failed to copy ansible chart files in remote server: %s", err)
 	}
 
 	return nil
