@@ -1,4 +1,5 @@
 .idea/
-./aws/ec2/buddy_care_key.pem
-./aws/ec2/credentials
-./TODO
+aws/ec2/buddy_care_key.pem
+aws/ec2/credentials
+TODO
+aws/ec2/.DS_Store

@@ -54,12 +54,26 @@ pipeline {
         }
         stage('deployment k8s'){
             steps{
-                echo 'Copying Ansible playbook from EC2...'
-                sh '''
-                    sudo chown ubuntu:ubuntu $WORKSPACE/$REPO_NAME/$INFRASTRUCTURE_NAME/scripts/execute_deployment.sh && \
-                    sudo -u ubuntu chmod +x $WORKSPACE/$REPO_NAME/$INFRASTRUCTURE_NAME/scripts/execute_deployment.sh  && \
-                    sudo -u ubuntu $WORKSPACE/$REPO_NAME/$INFRASTRUCTURE_NAME/scripts/execute_deployment.sh $REPO_NAME $SERVICE_NAME $INFRASTRUCTURE_NAME
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'aws-credentials',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',  // Nombre de la variable de entorno para la clave de acceso
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY' // Nombre de la variable de entorno para la clave secreta
+                )]) {
+                    sh '''
+                        echo "AWS_ACCESS_KEY_ID is: ${AWS_ACCESS_KEY_ID}"
+                        echo "AWS_SECRET_ACCESS_KEY is: ${AWS_SECRET_ACCESS_KEY}"
+
+                        sudo chown ubuntu:ubuntu $WORKSPACE/$REPO_NAME/$INFRASTRUCTURE_NAME/scripts/execute_deployment.sh && \
+                        sudo -u ubuntu chmod +x $WORKSPACE/$REPO_NAME/$INFRASTRUCTURE_NAME/scripts/execute_deployment.sh  && \
+                        sudo -u ubuntu $WORKSPACE/$REPO_NAME/$INFRASTRUCTURE_NAME/scripts/execute_deployment.sh \
+                        $REPO_NAME \
+                        $SERVICE_NAME \
+                        $INFRASTRUCTURE_NAME \
+                        $AWS_ACCESS_KEY_ID \
+                        $AWS_SECRET_ACCESS_KEY \
+                        v1.$BUILD_ID
+                    '''
+                    }
             }
         }
     }

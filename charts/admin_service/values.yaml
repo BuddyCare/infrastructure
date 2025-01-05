@@ -1,3 +1,4 @@
+version: ''
 target_group: "localhost"
 deployment_name: "admin-service-deployment"
 service_name: "admin-service"
@@ -9,3 +10,7 @@ container_image: "alexrondon89/admin_service:latest"
 container_port: 4000
 port: 5000
 environment: "local"
+secrets:
+  jwt: "bXlfc2VjcmV0X2p3dF91cGRhdGVkX3Yy"
+  aws_access_key_id: ""
+  aws_secret_access_key: ""
